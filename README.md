@@ -104,7 +104,6 @@ Serial.begin(115200);
 - เมื่อผู้ใช้กำหนดค่าเสร็จและสามารถ connect Network ได้ให้ประกาศข้อความ Connected. เพื่อให้ทราบสถานะของการทำงาน (Re-Check การทำงาน) 
 
 ~~~C++
-  // if you get here you have connected to the WiFi
   Serial.println("Connected.");
 ~~~
 
@@ -116,29 +115,51 @@ Serial.begin(115200);
 
 **กระบวนการวนซ้ำของโปรแกรม void loop()**
 
-~~~C++
-WiFiClient client = server.available();   // Listen for incoming clients
+- กำหนดให้รอการเชื่อมต่อจาก clients
 
-  if (client) {                             // If a new client connects,
-    Serial.println("New Client.");          // print a message out in the serial port
-    String currentLine = "";                // make a String to hold incoming data from the client
-    while (client.connected()) {            // loop while the client's connected
-      if (client.available()) {             // if there's bytes to read from the client,
-        char c = client.read();             // read a byte, then
-        Serial.write(c);                    // print it out the serial monitor
+~~~C++
+WiFiClient client = server.available();
+~~~
+
+- ถ้ามี client เชื่อมต่อเข้ามาใหม่ ก็ให้แสดงผลออกทาง serial port จากนั้นให้สร้าง String เพื่อเก็บข้อมูลจาก client
+
+~~~C++
+  if (client) {                             
+    Serial.println("New Client.");          
+    String currentLine = "";                
+~~~
+
+- จากนั้นใช้ while loop วนซ้ำ ถ้ามีข้อมูลที่อ่านได้จาก client ให้แสดงผลออกทาง serial monitor
+
+~~~C++
+    while (client.connected()) {            
+      if (client.available()) {             
+        char c = client.read();             
+        Serial.write(c);   
+~~~
+
+- กำหนดค่า header ถ้าข้อมูลอักขระขึ้นบรรทัดใหม่ ('\n') นั่นคือจุดสิ้นสุดคำขอ HTTP ของไคลเอ็นต์ ดังนั้นให้ส่ง response จากนั้น if เชคต่อ
+
+~~~C++
         header += c;
-        if (c == '\n') {                    // if the byte is a newline character
-          // if the current line is blank, you got two newline characters in a row.
-          // that's the end of the client HTTP request, so send a response:
+        if (c == '\n') {
+~~~
+
+- ถ้า response code (e.g. HTTP/1.1 200 OK) ก็ให้แสดงผลให้ผู้ใช้ทราบถึงกระบวนการทำงานต่อไป (Re-Check การทำงาน)
+
+~~~C++
           if (currentLine.length() == 0) {
-            // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
-            // and a content-type so the client knows what's coming, then a blank line:
             client.println("HTTP/1.1 200 OK");
             client.println("Content-type:text/html");
             client.println("Connection: close");
             client.println();
-            
-            // turns the GPIOs on and off
+~~~~
+
+- เปิดและปิด GPIO 
+  - ถ้า GET on ก็ให้ digitalWrite output HIGH
+  - ถ้า GET off ก็ให้ digitalWrite output LOW
+
+~~~C++
             if (header.indexOf("GET /5/on") >= 0) {
               Serial.println("GPIO 5 on");
               output5State = "on";
@@ -156,8 +177,11 @@ WiFiClient client = server.available();   // Listen for incoming clients
               output4State = "off";
               digitalWrite(output4, LOW);
             }
-            
-            // Display the HTML web page
+~~~
+
+- ส่วนของการแสดงผล HTML web page
+
+~~~C++
             client.println("<!DOCTYPE html><html>");
             client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
             client.println("<link rel=\"icon\" href=\"data:,\">");
@@ -170,7 +194,11 @@ WiFiClient client = server.available();   // Listen for incoming clients
             
             // Web Page Heading
             client.println("<body><h1>ESP8266 Web Server</h1>");
-            
+~~~
+
+- ส่วนของการแสดงผล HTML state buttons
+
+~~~C++
             // Display current state, and ON/OFF buttons for GPIO 5  
             client.println("<p>GPIO 5 - State " + output5State + "</p>");
             // If the output5State is off, it displays the ON button       
@@ -188,13 +216,22 @@ WiFiClient client = server.available();   // Listen for incoming clients
             } else {
               client.println("<p><a href=\"/4/off\"><button class=\"button button2\">OFF</button></a></p>");
             }
-            client.println("</body></html>");
             
-            // The HTTP response ends with another blank line
+            client.println("</body></html>");
+~~~            
+            
+- แสดงการตอบสนอง HTTP ลงท้ายด้วยบรรทัดว่างอื่น            
+
+~~~C++
             client.println();
             // Break out of the while loop
             break;
-          } else { // if you got a newline, then clear currentLine
+~~~
+
+- แต่ถ้ามีการขึ้นบันทัดใหม่ก็ให้ clear currentLine แต่ถ้านอกเหนือจากนั้นก็ให้เพิ่ม end ที่ currentLine
+
+~~~C++
+          } else {
             currentLine = "";
           }
         } else if (c != '\r') {  // if you got anything else but a carriage return character,
@@ -202,10 +239,15 @@ WiFiClient client = server.available();   // Listen for incoming clients
         }
       }
     }
-    // Clear the header variable
+~~~
+
+- ล้างค่า header และสิ้นสุดการทำงานของ client   
+
+~~~C++
     header = "";
-    // Close the connection
+    
     client.stop();
+    
     Serial.println("Client disconnected.");
     Serial.println("");
   }
