@@ -18,6 +18,8 @@
 **อ้างอิง**
 - [nodemcu-EEPROM](https://github.com/GridsNodeMCU/nodemcu-EEPROM)
 - [nodemcu-WiFiManager](https://github.com/GridsNodeMCU/nodemcu-WiFiManager)
+- 
+- [nodemcu-mode-deep_sleep](https://github.com/GridsNodeMCU/nodemcu-mode-deep_sleep)
 
 ### กระบวนการทำงานของโปรแกรม
 
