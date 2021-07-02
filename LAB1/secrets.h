@@ -1,3 +1,3 @@
 // Insert your WiFi secrets here:
-#define SECRET_SSID "" // Your network SSID (name)    
-#define SECRET_PASS "" // Your network password
+#define SECRET_SSID "domnick-WiFi" // Your network SSID   
+#define SECRET_PASS "domnickhunterrl" // Your network password

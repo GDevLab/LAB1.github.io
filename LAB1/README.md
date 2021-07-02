@@ -5,19 +5,31 @@
 - ระบุตัวอุปกรณ์,ชนิด และการทำงาน (ลงทะเบียน Device) พร้อมส่งข้อมูลกลับมายัง Server ทันทีที่เชื่อมต่อ Internet ได้ (Flash Memory/EEPROM)
 - เลือก WiFi Network ได้ด้วยตัว user เอง (WiFi Manager)
 - บันทึกข้อมูลไปยัง Log File (SD Card)
-- update code/firmware online (ArduinoOTA)
+- update code/firmware online (ArduinoOTA, AsyncElegantOTA)
 - เป็น Server Location ได้ (SPIFFS)
+
+ข้อมูล
+
+[ESP8266 OTA Updates with ArduinoIDE (OverTheAir)](https://randomnerdtutorials.com/esp8266-ota-updates-with-arduino-ide-over-the-air/)
+
+[ESP8266 OTA Over Tthe Air Arduino](https://randomnerdtutorials.com/esp8266-nodemcu-ota-over-the-air-arduino/)
+
+[EP27. ไม่ต้องใช้สาย ESP32 Over The Air programming](https://www.youtube.com/watch?v=isf_nDJ8wcw)
+
+[EP28 Arduino ESP32 Update Firmware Over The Internet](https://www.youtube.com/watch?v=aigU0d9c55A)
 
 ## ขั้นตอนการทำงาน
 
 1. เรียกใช้งาน Libraries
 
+- Arduino.h
 - ESP8266WiFi.h By IDE (ESP8266)
 - FS.h By IDE (ESP8266)
 - EEPROM.h By IDE
-- [WiFiManager.h](https://github.com/tzapu/WiFiManager) By tzapu.
+- [WiFiManager.h](https://github.com/tzapu/WiFiManager) By Tzapu
 - SD.h By IDE
-- [ArduinoOTA.h](https://github.com/jandrassy/ArduinoOTA) By andrassy
+- [ArduinoOTA.h](https://github.com/jandrassy/ArduinoOTA) By Andrassy
+- [AsyncElegantOTA](https://github.com/ayushsharma82/AsyncElegantOTA) By Ayush Sharma
 
 ~~~C++
 // EEPROM (save defult config)
@@ -47,11 +59,7 @@
 #include <EEPROM.h>
 
 int address_devid = 0;
-int address_ssid = 11;
-int address_pass = 23;
-String devid = "XXXXXXXXXX"; // 10 character
-String ssid = "XXXXXXXXXXXX"; // 12 character
-String pass = "XXXXXXXXXXXXXXX"; // 15 character
+String devid = "Device ID"; // 10 character (Device ID)
 
 #define RESET_EEPROM false
 
@@ -74,28 +82,6 @@ void setup() {
 
   Serial.println("");
 
-  Serial.print("Write WiFi SSID at address "); 
-  Serial.println(address_ssid);
-  Serial.print("");
-  for (int s = 0; s < ssid.length(); ++s)
-  {
-    EEPROM.write(address_ssid + s, ssid[s]);
-    Serial.print(ssid[s]); Serial.print("");
-  }
-
-  Serial.println("");
-
-  Serial.print("Write WiFi Password at address "); 
-  Serial.println(address_pass);
-  Serial.print("");
-  for (int p = 0; p < pass.length(); p++)
-  {
-    EEPROM.write(address_pass + p, pass[p]);
-    Serial.print(pass[p]); Serial.print("");
-  }
-
-  Serial.println("");
-
   if (EEPROM.commit()) {
     Serial.println("Data successfully committed");
   } else {
@@ -111,16 +97,7 @@ void loop() {
 - กำหนดค่าเริ่มต้น
 
 ~~~C++
-int devid_address = 0;
-int ssid_address = 11;
-int pass_address = 23;
-int devid_value = 10;
-int ssid_value = 12;
-int pass_value = 15;
 
-WiFiManager wm;
-
-bool portalRunning = false;
 ~~~
 
 3. กระบวนการ Setup โปรแกรม
