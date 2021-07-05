@@ -288,7 +288,7 @@ String EEPROM_read(int index, int length) {
 อัปโหลดร่างเว็บเซิร์ฟเวอร์ใหม่ – ตัวอย่าง
 มาดูตัวอย่างการใช้งานจริงกัน ลองนึกภาพว่าหลังจากอัปโหลดภาพร่างก่อนหน้านี้แล้ว คุณต้องการอัปโหลดภาพร่างใหม่ที่ให้คุณควบคุม LED ผ่านเว็บอินเทอร์เฟซเช่นโครงการนี้ นี่คือขั้นตอนที่คุณต้องปฏิบัติตาม:
 
-1. คัดลอกโค้ดตัวอย่างนี้ [LAB1_Ex_update_firmware.ino](https://github.com/GridsNodeMCU/LAB1.github.io/blob/main/LAB1_Ex_update_firmware/LAB1_Ex_update_firmware.ino) ไปยัง Arduino IDE และ "บันทึก"
+1. คัดลอกโค้ดตัวอย่างนี้ [LAB1_Ex_update_firmware.ino](https://github.com/GridsNodeMCU/LAB1.github.io/blob/main/LAB1.0_Ex_update_firmware/LAB1_Ex_update_firmware.ino) ไปยัง Arduino IDE และ "บันทึก"
 
 ใน File ตัวอย่างนี้มีบรรทัดที่จำเป็นในการจัดการ ElegantOTA ได้แก่
 
