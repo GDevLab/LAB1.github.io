@@ -2,7 +2,9 @@
 
 **ในส่วนนี้จะเป็นการอัปโหลด Fiile System (LittleFS) ไปยัง ESP8266 โดยใช้ AsyncElegantOTA**
 
-ในการกระทำนี้เราจำเป็นต้องมีปลั๊กอิน ESP8266 LittleFS Uploader ใน Arduino IDE ด้วย download และติดตั้ง PlugIn โดยสามารถดูได้จาก [ที่นี่](https://github.com/GridsNodeMCU/nodemcu-LittleFS)
+ในการกระทำนี้เราจำเป็นต้องมีปลั๊กอิน ESP8266 LittleFS Uploader ใน Arduino IDE ด้วย download และติดตั้ง PlugIn โดยสามารถดูได้จาก [ที่นี่](https://github.com/GridsNodeMCU/nodemcu-LittleFS) หรือ [Download](https://github.com/earlephilhower/arduino-esp8266littlefs-plugin/releases)
+
+**_Note_** ในการติดตั้ง Plug In พาธจะมีลักษณะดังนี้ /Arduino/tools/ESP8266LittleFS/tool/esp8266littlefs.jar
 
 ลองนึกภาพสถานการณ์ที่คุณต้องอัปโหลดไฟล์ไปยังระบบไฟล์ ESP8266 เช่น ไฟล์การกำหนดค่า ไฟล์ HTML, CSS และ JavaScript เพื่ออัปเดตหน้าเว็บเซิร์ฟเวอร์หรือไฟล์อื่นๆ ที่คุณอาจต้องการบันทึกใน LittleFS ผ่าน OTA
 
@@ -155,9 +157,25 @@ void loop() {
 
 ใต้โฟลเดอร์โครงการสร้างโฟลเดอร์ชื่อ "data" และวางไฟล์ HTML, CSS และ JavaScript ต่อไปนี้ (คลิกที่ลิงค์เพื่อดาวน์โหลดไฟล์) ลงในโฟลเดอร์ "data"
 
-- HTML: index.html
-- CSS: style.css
-- JavaScript: script.js
+- [index.html](https://github.com/GridsNodeMCU/LAB1.github.io/blob/main/LAB1.1_File_Ex/data/index.html)
+- [style.css](https://github.com/GridsNodeMCU/LAB1.github.io/blob/main/LAB1.1_File_Ex/data/style.css)
+- [script.js](https://github.com/GridsNodeMCU/LAB1.github.io/blob/main/LAB1.1_File_Ex/data/script.js)
 
 **_Tip_** เพื่อหาโฟลเดอร์โครงการของคุณ คุณสามารถไปที่ Sketch > Show Sketch Folder
 
+- จากนั้นให้ถอดสาย คอมพิวเตอร์ กับ ESP8266 ออกและใช้ Powerbank แทนแหล่งจ่ายไฟ 
+- คลิกที่ Tools > ESP8266 LittleFS data upload
+
+**_Note_** ในขั้นตอนนี้ Adruino IDE จะ Error ไม่ต้องตกใจเลื่อนหาในข้อความ Error มองหาบรรทัด upload จุดสังเกตุข้อความที่กำลังหาต้องมี [.mklittlefs.bin] จะท้ายเสมอ
+
+~~~C++
+[LittleFS] upload  : C:\Users\admin\AppData\Local\Temp\arduino_build_644050/LAB1.1_Ex_upload_file_LittleFS.mklittlefs.bin
+~~~
+
+- ไปที่โฟลเดอร์ที่เก็บไฟล์ตามพาทที่ได้มา ในกรณีที่ไม่พบไฟล์ LAB1.1_Ex_upload_file_LittleFS.mklittlefs.bin อาจเป็นเพราะไฟล์ถูกซ่อนอยู่ ให้ตั่งค่า Floder ก่อน โดยให้โชว์ไฟล์ที่ซ่อน และ นามสกุลไฟล์ จากนั้นให้ คัดลอกไฟล์ LAB1.1_Ex_upload_file_LittleFS.mklittlefs.bin ไปยังโฟลเดอร์โครงการของคุณ
+
+- ตอนนี้เรามีไฟล์ .mklittlefs.bin จากโฟลเดอร์ data แล้ว เราก็สามารถอัพโหลดไฟล์นั้นได้ โดยไปที่ที่อยู่ IP ของ ESP8266 ตามด้วย /update ตามขั้นตอนเดิม
+
+- หลังจากอัพโหลดไฟล์เสร็จแล้ว ให้กลับไปที่ที่อยู่ IP ของ ESP8266 คุณควรจะได้รับหน้าเว็บควบคุมเอาท์พุท ESP8266 ดังนี้
+
+[images]
