@@ -33,11 +33,7 @@ const short vers = 1;
 
 // EEPROM Config
 int devid_address = 0;
-int ssid_address = 11;
-int pass_address = 23;
 int devid_value = 10;
-int ssid_value = 12;
-int pass_value = 15;
 
 // Loaded from secrets.h
 const char ssid[] = SECRET_SSID;
@@ -74,19 +70,16 @@ void setup() {
   }
   // Show IP Connected in Serial port
   Serial.println(WiFi.localIP());
-               
-  if (devid.isEmpty()) { 
-    Serial.println("isEmpty");               
-    return;
-  }                  
+                                
   // Show Device ID in Serial port
   if (!devid == 0){
     Serial.println(devid);
   } else {
     Serial.println("No!! Device ID");
   }
+  
   // Show Firmware Version in Serial port
-  Serial.print("Sketch version ");
+  Serial.print("Sketch version : ");
   Serial.println(vers);
   Serial.println(ssid);
   Serial.println(pass);
